@@ -1,0 +1,132 @@
+﻿/* jetlag-solutions.css */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.88);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1c1c1c;
+}
+
+.intro {
+    font-size: 16px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.symptoms-title {
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.symptoms-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+    .symptoms-list li {
+        width: 50%;
+        padding: 4px 0;
+    }
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.jetlag-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    .jetlag-table th,
+    .jetlag-table td {
+        border: 1px solid #aaa;
+        padding: 10px;
+        vertical-align: top;
+    }
+
+    .jetlag-table th {
+        background-color: #f0f0f0;
+        text-align: center;
+    }
+
+.topic-title {
+    font-weight: bold;
+    color: #5b3cc4;
+    text-align: center;
+}
+
+.adjustment-block {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fdfdfd;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+    .adjustment-block h3 {
+        margin-top: 0;
+        color: #444;
+    }
+
+    .adjustment-block ul {
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+
+.responsive-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.responsive-table th,
+.responsive-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .symptoms-list li {
+        width: 100%;
+    }
+
+    .container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .main-title {
+        font-size: 22px;
+    }
+
+    .jetlag-table th, .jetlag-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .responsive-table th,
+    .responsive-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+}

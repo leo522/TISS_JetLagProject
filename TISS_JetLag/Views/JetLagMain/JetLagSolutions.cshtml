@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "~/Views/Shared/_JetLag.cshtml";
+}
+@model List<TISS_JetLag.Models.JetLagMainViewModel>
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/jetlag-solutionsStyle.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="main-title">旅行疲勞 & 時差之對策</h1>
+        <p class="intro">
+            國訓中心選手經常出國比賽或移地訓練，主要交通工具為商務客機，故會面臨旅行疲勞（<em>travel fatigue</em>）與時差（<em>jet lag</em>）之挑戰，兩者症狀相似但成因與對策各有不同（非藥物性）。
+        </p>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <span style="font-weight: bold;">🔶 相似症狀：</span>
+            <div class="symptoms-inline" style="color: #a94442; font-weight: 500;">
+                <span>疲倦</span>、
+                <span>躁動不安</span>、
+                <span>頭痛</span>、
+                <span>無精打采</span>、
+                <span>食慾不振</span>、
+                <span>腸道問題</span>、
+                <span>睡眠障礙</span>、
+                <span>專注力減弱</span>、
+                <span>免疫力下降</span>、
+                <span>沮喪</span>
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <table class="jetlag-table">
+                <thead>
+                    <tr>
+                        <th>主題</th>
+                        <th>成因</th>
+                        <th>對策</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var topic in Model)
+                    {
+                        <tr>
+                            <td class="topic-title">@topic.Title</td>
+                            <td>
+                                <ul>
+                                    @foreach (var cause in topic.Causes)
+                                    {
+                                        <li>@cause</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    @foreach (var strategy in topic.Strategies)
+                                    {
+                                        <li>@strategy</li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @foreach (var topic in Model.Where(m => m.Title.Contains("時差")))
+        {
+            <div class="adjustment-block">
+                <h3>作息調整建議</h3>
+                <ul>
+                    @foreach (var adj in topic.JetLagAdjustments)
+                    {
+                        <li>@adj</li>
+                    }
+                </ul>
+
+                <h3>日照調整建議</h3>
+                <div class="responsive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>飛行方向</th>
+                                <th>時段</th>
+                                <th>建議</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sun in topic.SunlightAdvices)
+                            {
+                                <tr>
+                                    <td>@sun.SunlightDirection</td>
+                                    <td>@sun.TimePeriod</td>
+                                    <td>@sun.Advice</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "進階說明與調整建議";
+    Layout = "~/Views/Shared/_JetLag.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/jetlag-explanationStyle.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container" style="max-width: 1200px;">
+        <h1 class="main-title">旅行疲勞與時差｜進階說明與調整建議</h1>
+
+        <!-- 飛行方向與時差換算 -->
+        <section class="info-section">
+            <h2>✈️ 飛行方向與時差天數換算</h2>
+            <p>飛行方向與生理時鐘的調整難易度有關。向東飛行需提早作息，較難適應；向西則延後作息，較容易調整。</p>
+            <table class="jetlag-table">
+                <thead>
+                    <tr>
+                        <th>飛行方向</th>
+                        <th>生理調整方向</th>
+                        <th>適應難易度</th>
+                        <th>時差調整估算</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>向東飛行</td>
+                        <td>提早</td>
+                        <td>較困難</td>
+                        <td>跨越時區數 × 2/3 天</td>
+                    </tr>
+                    <tr>
+                        <td>向西飛行</td>
+                        <td>延後</td>
+                        <td>較容易</td>
+                        <td>跨越時區數 × 1/2 天</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 日照調整建議 -->
+        <section class="info-section">
+            <h2>🌞 日照調整建議</h2>
+            <table class="jetlag-table">
+                <thead>
+                    <tr>
+                        <th>飛行方向</th>
+                        <th>時間</th>
+                        <th>建議</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>向西飛行</td>
+                        <td>出國前 1 週下午</td>
+                        <td>避免日照，幫助延後生理時鐘</td>
+                    </tr>
+                    <tr>
+                        <td>向西飛行</td>
+                        <td>上午</td>
+                        <td>盡量接受日照，幫助同步</td>
+                    </tr>
+                    <tr>
+                        <td>向東飛行</td>
+                        <td>出國前 1 週上午</td>
+                        <td>接受日照，幫助提前生理時鐘</td>
+                    </tr>
+                    <tr>
+                        <td>向東飛行</td>
+                        <td>下午</td>
+                        <td>避免日照，避免延後作息</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 飛行方向判斷教學 -->
+        <section class="info-section">
+            <h2>🧭 飛行方向判斷教學</h2>
+            <p>根據出發地與目的地的經度來判斷：</p>
+            <ul>
+                <li>出發地經度 < 目的地經度 → 向東飛行</li>
+                <li>出發地經度 > 目的地經度 → 向西飛行</li>
+            </ul>
+            <table class="jetlag-table">
+                <thead>
+                    <tr>
+                        <th>出發地</th>
+                        <th>目的地</th>
+                        <th>經度比較</th>
+                        <th>飛行方向</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>台灣（121°E）</td>
+                        <td>英國（0°）</td>
+                        <td>121° > 0°</td>
+                        <td>向西</td>
+                    </tr>
+                    <tr>
+                        <td>台灣（121°E）</td>
+                        <td>美國加州（-118°）</td>
+                        <td>121° > -118°</td>
+                        <td>向東</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 生理時鐘調整圖解 -->
+        <section class="info-section">
+            <h2>📊 生理時鐘調整圖解</h2>
+            <p>下圖將展示向東與向西飛行時，身體作息時間如何逐步調整至當地時間。</p>
+            <div class="chart-placeholder">
+                <em>（此區將插入圖表說明，後續以折線圖或進度條方式呈現）</em>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

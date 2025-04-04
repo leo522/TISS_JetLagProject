@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TISS_JetLagSolutionsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cause">
+          <Key>
+            <PropertyRef Name="CauseID" />
+          </Key>
+          <Property Name="CauseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TopicID" Type="int" Nullable="false" />
+          <Property Name="CauseDescription" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JetLagAdjustment">
+          <Key>
+            <PropertyRef Name="AdjustmentID" />
+          </Key>
+          <Property Name="AdjustmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JetLagDirection" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="AdjustmentDescription" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Strategy">
+          <Key>
+            <PropertyRef Name="StrategyID" />
+          </Key>
+          <Property Name="StrategyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TopicID" Type="int" Nullable="false" />
+          <Property Name="StrategyContent" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SunlightAdvice">
+          <Key>
+            <PropertyRef Name="SunlightAdviceID" />
+          </Key>
+          <Property Name="SunlightAdviceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SunlightDirection" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="TimePeriod" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Advice" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Symptom">
+          <Key>
+            <PropertyRef Name="SymptomID" />
+          </Key>
+          <Property Name="SymptomID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SymptomName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TopicSymptom">
+          <Key>
+            <PropertyRef Name="TopicSymptomID" />
+          </Key>
+          <Property Name="TopicSymptomID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TopicID" Type="int" Nullable="false" />
+          <Property Name="SymptomID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelFatigueJetLagTopic">
+          <Key>
+            <PropertyRef Name="TopicID" />
+          </Key>
+          <Property Name="TopicID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="TravelDescription" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <Association Name="FK__Cause__TopicID__3F466844">
+          <End Role="TravelFatigueJetLagTopic" Type="Self.TravelFatigueJetLagTopic" Multiplicity="1" />
+          <End Role="Cause" Type="Self.Cause" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelFatigueJetLagTopic">
+              <PropertyRef Name="TopicID" />
+            </Principal>
+            <Dependent Role="Cause">
+              <PropertyRef Name="TopicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Strategy__TopicI__4222D4EF">
+          <End Role="TravelFatigueJetLagTopic" Type="Self.TravelFatigueJetLagTopic" Multiplicity="1" />
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelFatigueJetLagTopic">
+              <PropertyRef Name="TopicID" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="TopicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TopicSymp__Sympt__3C69FB99">
+          <End Role="Symptom" Type="Self.Symptom" Multiplicity="1" />
+          <End Role="TopicSymptom" Type="Self.TopicSymptom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Symptom">
+              <PropertyRef Name="SymptomID" />
+            </Principal>
+            <Dependent Role="TopicSymptom">
+              <PropertyRef Name="SymptomID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TopicSymp__Topic__3B75D760">
+          <End Role="TravelFatigueJetLagTopic" Type="Self.TravelFatigueJetLagTopic" Multiplicity="1" />
+          <End Role="TopicSymptom" Type="Self.TopicSymptom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelFatigueJetLagTopic">
+              <PropertyRef Name="TopicID" />
+            </Principal>
+            <Dependent Role="TopicSymptom">
+              <PropertyRef Name="TopicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TISS_JetLagSolutionsModelStoreContainer">
+          <EntitySet Name="Cause" EntityType="Self.Cause" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JetLagAdjustment" EntityType="Self.JetLagAdjustment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SunlightAdvice" EntityType="Self.SunlightAdvice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Symptom" EntityType="Self.Symptom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TopicSymptom" EntityType="Self.TopicSymptom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TravelFatigueJetLagTopic" EntityType="Self.TravelFatigueJetLagTopic" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Cause__TopicID__3F466844" Association="Self.FK__Cause__TopicID__3F466844">
+            <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
+            <End Role="Cause" EntitySet="Cause" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Strategy__TopicI__4222D4EF" Association="Self.FK__Strategy__TopicI__4222D4EF">
+            <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
+            <End Role="Strategy" EntitySet="Strategy" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TopicSymp__Sympt__3C69FB99" Association="Self.FK__TopicSymp__Sympt__3C69FB99">
+            <End Role="Symptom" EntitySet="Symptom" />
+            <End Role="TopicSymptom" EntitySet="TopicSymptom" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TopicSymp__Topic__3B75D760" Association="Self.FK__TopicSymp__Topic__3B75D760">
+            <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
+            <End Role="TopicSymptom" EntitySet="TopicSymptom" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TISS_JetLagSolutionsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cause">
+          <Key>
+            <PropertyRef Name="CauseID" />
+          </Key>
+          <Property Name="CauseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TopicID" Type="Int32" Nullable="false" />
+          <Property Name="CauseDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TravelFatigueJetLagTopic" Relationship="Self.FK__Cause__TopicID__3F466844" FromRole="Cause" ToRole="TravelFatigueJetLagTopic" />
+        </EntityType>
+        <EntityType Name="JetLagAdjustment">
+          <Key>
+            <PropertyRef Name="AdjustmentID" />
+          </Key>
+          <Property Name="AdjustmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JetLagDirection" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdjustmentDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Strategy">
+          <Key>
+            <PropertyRef Name="StrategyID" />
+          </Key>
+          <Property Name="StrategyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TopicID" Type="Int32" Nullable="false" />
+          <Property Name="StrategyContent" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TravelFatigueJetLagTopic" Relationship="Self.FK__Strategy__TopicI__4222D4EF" FromRole="Strategy" ToRole="TravelFatigueJetLagTopic" />
+        </EntityType>
+        <EntityType Name="SunlightAdvice">
+          <Key>
+            <PropertyRef Name="SunlightAdviceID" />
+          </Key>
+          <Property Name="SunlightAdviceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SunlightDirection" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TimePeriod" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Advice" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Symptom">
+          <Key>
+            <PropertyRef Name="SymptomID" />
+          </Key>
+          <Property Name="SymptomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SymptomName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TopicSymptom" Relationship="Self.FK__TopicSymp__Sympt__3C69FB99" FromRole="Symptom" ToRole="TopicSymptom" />
+        </EntityType>
+        <EntityType Name="TopicSymptom">
+          <Key>
+            <PropertyRef Name="TopicSymptomID" />
+          </Key>
+          <Property Name="TopicSymptomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TopicID" Type="Int32" Nullable="false" />
+          <Property Name="SymptomID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Symptom" Relationship="Self.FK__TopicSymp__Sympt__3C69FB99" FromRole="TopicSymptom" ToRole="Symptom" />
+          <NavigationProperty Name="TravelFatigueJetLagTopic" Relationship="Self.FK__TopicSymp__Topic__3B75D760" FromRole="TopicSymptom" ToRole="TravelFatigueJetLagTopic" />
+        </EntityType>
+        <EntityType Name="TravelFatigueJetLagTopic">
+          <Key>
+            <PropertyRef Name="TopicID" />
+          </Key>
+          <Property Name="TopicID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TravelDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cause" Relationship="Self.FK__Cause__TopicID__3F466844" FromRole="TravelFatigueJetLagTopic" ToRole="Cause" />
+          <NavigationProperty Name="Strategy" Relationship="Self.FK__Strategy__TopicI__4222D4EF" FromRole="TravelFatigueJetLagTopic" ToRole="Strategy" />
+          <NavigationProperty Name="TopicSymptom" Relationship="Self.FK__TopicSymp__Topic__3B75D760" FromRole="TravelFatigueJetLagTopic" ToRole="TopicSymptom" />
+        </EntityType>
+        <Association Name="FK__Cause__TopicID__3F466844">
+          <End Role="TravelFatigueJetLagTopic" Type="Self.TravelFatigueJetLagTopic" Multiplicity="1" />
+          <End Role="Cause" Type="Self.Cause" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelFatigueJetLagTopic">
+              <PropertyRef Name="TopicID" />
+            </Principal>
+            <Dependent Role="Cause">
+              <PropertyRef Name="TopicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Strategy__TopicI__4222D4EF">
+          <End Role="TravelFatigueJetLagTopic" Type="Self.TravelFatigueJetLagTopic" Multiplicity="1" />
+          <End Role="Strategy" Type="Self.Strategy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelFatigueJetLagTopic">
+              <PropertyRef Name="TopicID" />
+            </Principal>
+            <Dependent Role="Strategy">
+              <PropertyRef Name="TopicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TopicSymp__Sympt__3C69FB99">
+          <End Role="Symptom" Type="Self.Symptom" Multiplicity="1" />
+          <End Role="TopicSymptom" Type="Self.TopicSymptom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Symptom">
+              <PropertyRef Name="SymptomID" />
+            </Principal>
+            <Dependent Role="TopicSymptom">
+              <PropertyRef Name="SymptomID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TopicSymp__Topic__3B75D760">
+          <End Role="TravelFatigueJetLagTopic" Type="Self.TravelFatigueJetLagTopic" Multiplicity="1" />
+          <End Role="TopicSymptom" Type="Self.TopicSymptom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelFatigueJetLagTopic">
+              <PropertyRef Name="TopicID" />
+            </Principal>
+            <Dependent Role="TopicSymptom">
+              <PropertyRef Name="TopicID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TISS_JetLagSolutionsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cause" EntityType="Self.Cause" />
+          <EntitySet Name="JetLagAdjustment" EntityType="Self.JetLagAdjustment" />
+          <EntitySet Name="Strategy" EntityType="Self.Strategy" />
+          <EntitySet Name="SunlightAdvice" EntityType="Self.SunlightAdvice" />
+          <EntitySet Name="Symptom" EntityType="Self.Symptom" />
+          <EntitySet Name="TopicSymptom" EntityType="Self.TopicSymptom" />
+          <EntitySet Name="TravelFatigueJetLagTopic" EntityType="Self.TravelFatigueJetLagTopic" />
+          <AssociationSet Name="FK__Cause__TopicID__3F466844" Association="Self.FK__Cause__TopicID__3F466844">
+            <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
+            <End Role="Cause" EntitySet="Cause" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Strategy__TopicI__4222D4EF" Association="Self.FK__Strategy__TopicI__4222D4EF">
+            <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
+            <End Role="Strategy" EntitySet="Strategy" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TopicSymp__Sympt__3C69FB99" Association="Self.FK__TopicSymp__Sympt__3C69FB99">
+            <End Role="Symptom" EntitySet="Symptom" />
+            <End Role="TopicSymptom" EntitySet="TopicSymptom" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TopicSymp__Topic__3B75D760" Association="Self.FK__TopicSymp__Topic__3B75D760">
+            <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
+            <End Role="TopicSymptom" EntitySet="TopicSymptom" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TISS_JetLagSolutionsModelStoreContainer" CdmEntityContainer="TISS_JetLagSolutionsEntities">
+          <EntitySetMapping Name="Cause">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.Cause">
+              <MappingFragment StoreEntitySet="Cause">
+                <ScalarProperty Name="CauseID" ColumnName="CauseID" />
+                <ScalarProperty Name="TopicID" ColumnName="TopicID" />
+                <ScalarProperty Name="CauseDescription" ColumnName="CauseDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JetLagAdjustment">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.JetLagAdjustment">
+              <MappingFragment StoreEntitySet="JetLagAdjustment">
+                <ScalarProperty Name="AdjustmentID" ColumnName="AdjustmentID" />
+                <ScalarProperty Name="JetLagDirection" ColumnName="JetLagDirection" />
+                <ScalarProperty Name="AdjustmentDescription" ColumnName="AdjustmentDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Strategy">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.Strategy">
+              <MappingFragment StoreEntitySet="Strategy">
+                <ScalarProperty Name="StrategyID" ColumnName="StrategyID" />
+                <ScalarProperty Name="TopicID" ColumnName="TopicID" />
+                <ScalarProperty Name="StrategyContent" ColumnName="StrategyContent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SunlightAdvice">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.SunlightAdvice">
+              <MappingFragment StoreEntitySet="SunlightAdvice">
+                <ScalarProperty Name="SunlightAdviceID" ColumnName="SunlightAdviceID" />
+                <ScalarProperty Name="SunlightDirection" ColumnName="SunlightDirection" />
+                <ScalarProperty Name="TimePeriod" ColumnName="TimePeriod" />
+                <ScalarProperty Name="Advice" ColumnName="Advice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Symptom">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.Symptom">
+              <MappingFragment StoreEntitySet="Symptom">
+                <ScalarProperty Name="SymptomID" ColumnName="SymptomID" />
+                <ScalarProperty Name="SymptomName" ColumnName="SymptomName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TopicSymptom">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.TopicSymptom">
+              <MappingFragment StoreEntitySet="TopicSymptom">
+                <ScalarProperty Name="TopicSymptomID" ColumnName="TopicSymptomID" />
+                <ScalarProperty Name="TopicID" ColumnName="TopicID" />
+                <ScalarProperty Name="SymptomID" ColumnName="SymptomID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelFatigueJetLagTopic">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.TravelFatigueJetLagTopic">
+              <MappingFragment StoreEntitySet="TravelFatigueJetLagTopic">
+                <ScalarProperty Name="TopicID" ColumnName="TopicID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="TravelDescription" ColumnName="TravelDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
