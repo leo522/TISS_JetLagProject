@@ -10,6 +10,16 @@
 <body>
     <div class="container" style="max-width: 1200px;">
         <h1 class="main-title">旅行疲勞與時差｜進階說明與調整建議</h1>
+        @if (Model != null)
+        {
+            <section class="info-section">
+                <h2>📌 您的查詢結果</h2>
+                <p><strong>目的地：</strong>@Model.DestinationCountry - @Model.DestinationCity</p>
+                <p><strong>飛行方向：</strong>@Model.FlightDirection</p>
+                <p><strong>與台灣時差：</strong>@Model.TimeDifference 小時</p>
+                <p><strong>建議調整天數：</strong><span style="color: #d9534f; font-weight: bold;">@Model.SuggestedDays 天</span></p>
+            </section>
+        }
 
         <!-- 飛行方向與時差換算 -->
         <section class="info-section">
@@ -112,13 +122,13 @@
         </section>
 
         <!-- 生理時鐘調整圖解 -->
-        <section class="info-section">
+        @*<section class="info-section">
             <h2>📊 生理時鐘調整圖解</h2>
             <p>下圖將展示向東與向西飛行時，身體作息時間如何逐步調整至當地時間。</p>
             <div class="chart-placeholder">
                 <em>（此區將插入圖表說明，後續以折線圖或進度條方式呈現）</em>
             </div>
-        </section>
+        </section>*@
     </div>
 </body>
 </html>

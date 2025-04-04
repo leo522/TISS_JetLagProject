@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_JetLag.cshtml";
+}
+@model TISS_JetLag.Models.TimeZoneSuggestionViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/jetlag-explanationStyle.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container" style="max-width: 800px;">
+        <h2 class="main-title">🧭 時差建議查詢</h2>
+        <p>請從下方選擇您預計前往的目的地（以台灣出發為基準）：</p>
+
+        @using (Html.BeginForm("ZoneSugges", "TimeZoneSuggestion", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label for="CountryID">選擇目的地：</label>
+                @Html.DropDownList("CountryID", ViewBag.CountryList as List<SelectListItem>, "請選擇國家/城市", new { @class = "form-control" })
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">查詢建議</button>
+        }
+    </div>
+</body>
+</html>

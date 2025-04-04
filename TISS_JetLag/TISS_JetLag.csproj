@@ -130,10 +130,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\JetLagExplanationController.cs" />
     <Compile Include="Controllers\JetLagMainController.cs" />
+    <Compile Include="Controllers\TimeZoneSuggestionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cause.cs">
+      <DependentUpon>JetLagSolutionsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CountryTimeZone.cs">
       <DependentUpon>JetLagSolutionsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\JetLagAdjustment.cs">
@@ -190,6 +194,7 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="css\bgStyle.css" />
+    <Content Include="css\jetlag-explanationStyle.css" />
     <Content Include="css\jetlag-solutionsStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -247,6 +252,7 @@
     <Content Include="Views\Shared\_JetLag.cshtml" />
     <Content Include="Views\JetLagMain\JetLagSolutions.cshtml" />
     <Content Include="Views\JetLagExplanation\Explanation.cshtml" />
+    <Content Include="Views\TimeZoneSuggestion\ZoneSugges.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -32,5 +32,6 @@ namespace TISS_JetLag.Models
         public virtual DbSet<Symptom> Symptom { get; set; }
         public virtual DbSet<TopicSymptom> TopicSymptom { get; set; }
         public virtual DbSet<TravelFatigueJetLagTopic> TravelFatigueJetLagTopic { get; set; }
+        public virtual DbSet<CountryTimeZone> CountryTimeZone { get; set; }
     }
 }

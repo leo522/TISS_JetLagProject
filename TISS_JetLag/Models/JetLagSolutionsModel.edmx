@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TISS_JetLagSolutionsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TISS_JetLagSolutionsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cause">
           <Key>
             <PropertyRef Name="CauseID" />
@@ -12,6 +12,17 @@
           <Property Name="CauseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TopicID" Type="int" Nullable="false" />
           <Property Name="CauseDescription" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CountryTimeZone">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Longitude" Type="float" Nullable="false" />
+          <Property Name="TimeZoneOffset" Type="int" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="JetLagAdjustment">
           <Key>
@@ -111,6 +122,7 @@
         </Association>
         <EntityContainer Name="TISS_JetLagSolutionsModelStoreContainer">
           <EntitySet Name="Cause" EntityType="Self.Cause" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountryTimeZone" EntityType="Self.CountryTimeZone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JetLagAdjustment" EntityType="Self.JetLagAdjustment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Strategy" EntityType="Self.Strategy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SunlightAdvice" EntityType="Self.SunlightAdvice" Schema="dbo" store:Type="Tables" />
@@ -134,8 +146,7 @@
             <End Role="TopicSymptom" EntitySet="TopicSymptom" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TISS_JetLagSolutionsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -275,7 +286,19 @@
             <End Role="TravelFatigueJetLagTopic" EntitySet="TravelFatigueJetLagTopic" />
             <End Role="TopicSymptom" EntitySet="TopicSymptom" />
           </AssociationSet>
+          <EntitySet Name="CountryTimeZone" EntityType="TISS_JetLagSolutionsModel.CountryTimeZone" />
         </EntityContainer>
+        <EntityType Name="CountryTimeZone">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="TimeZoneOffset" Type="Int32" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -342,6 +365,18 @@
                 <ScalarProperty Name="TopicID" ColumnName="TopicID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="TravelDescription" ColumnName="TravelDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CountryTimeZone">
+            <EntityTypeMapping TypeName="TISS_JetLagSolutionsModel.CountryTimeZone">
+              <MappingFragment StoreEntitySet="CountryTimeZone">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="TimeZoneOffset" ColumnName="TimeZoneOffset" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

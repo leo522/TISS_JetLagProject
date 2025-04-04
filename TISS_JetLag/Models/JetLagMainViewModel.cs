@@ -5,6 +5,7 @@ using System.Web;
 
 namespace TISS_JetLag.Models
 {
+    #region 主頁
     public class JetLagMainViewModel
     {
         public int TopicID { get; set; }
@@ -18,11 +19,28 @@ namespace TISS_JetLag.Models
         public List<string> JetLagAdjustments { get; set; }
         public List<SunlightAdviceViewModel> SunlightAdvices { get; set; }
     }
+    #endregion
 
+    #region 時差建議
     public class SunlightAdviceViewModel
     {
         public string SunlightDirection { get; set; }
         public string TimePeriod { get; set; }
         public string Advice { get; set; }
     }
+    #endregion
+
+    #region 地區時差經緯度
+    public class TimeZoneSuggestionViewModel
+    {
+        public string DestinationCountry { get; set; }
+        public string DestinationCity { get; set; }
+        public double Longitude { get; set; }
+        public int TimeZoneOffset { get; set; }
+
+        public string FlightDirection { get; set; }
+        public int TimeDifference { get; set; }
+        public int SuggestedDays { get; set; }
+    }
+    #endregion
 }
