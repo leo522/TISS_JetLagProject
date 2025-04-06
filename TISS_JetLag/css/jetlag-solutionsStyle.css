@@ -130,3 +130,60 @@ body {
         padding: 8px;
     }
 }
+
+.timezone-result {
+    margin-top: 32px;
+    background-color: #ffffff;
+    padding: 24px 28px;
+    border-left: 6px solid #5b9bd5;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+    .timezone-result h3 {
+        font-size: 26px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #20447c;
+        font-weight: 700;
+    }
+
+    .timezone-result p {
+        font-size: 18px;
+        margin-bottom: 12px;
+        line-height: 1.6;
+    }
+
+    .timezone-result span {
+        font-size: 20px;
+        font-weight: bold;
+        color: #d9534f;
+    }
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px; /* ✅ 可加強區塊分隔感（選擇性） */
+}
+
+.search-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+}
+
+    .search-btn:hover {
+        background: linear-gradient(135deg, #0056b3, #003f88);
+        box-shadow: 0 6px 14px rgba(0, 86, 179, 0.35);
+        transform: translateY(-1px);
+    }

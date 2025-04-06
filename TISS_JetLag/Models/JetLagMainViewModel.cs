@@ -18,6 +18,8 @@ namespace TISS_JetLag.Models
 
         public List<string> JetLagAdjustments { get; set; }
         public List<SunlightAdviceViewModel> SunlightAdvices { get; set; }
+        public List<JetLagMainViewModel> TopicList { get; set; }
+        public TimeZoneSuggestionViewModel TimeZoneSuggestion { get; set; }
     }
     #endregion
 

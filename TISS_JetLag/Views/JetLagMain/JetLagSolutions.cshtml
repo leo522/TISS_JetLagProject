@@ -1,14 +1,13 @@
 ﻿@{
     Layout = "~/Views/Shared/_JetLag.cshtml";
 }
-@model List<TISS_JetLag.Models.JetLagMainViewModel>
+@model TISS_JetLag.Models.JetLagMainViewModel
 <!DOCTYPE html>
 <html>
 <head>
     <link href="~/css/jetlag-solutionsStyle.css" rel="stylesheet" />
 </head>
 <body>
-
     <div class="container">
         <h1 class="main-title">旅行疲勞 & 時差之對策</h1>
         <p class="intro">
@@ -29,6 +28,30 @@
                 <span>沮喪</span>
             </div>
         </div>
+        <!-- 時差建議查詢區塊 -->
+        <div class="timezone-section">
+            <h2>🧭 時差建議查詢</h2>
+            <p>請從下方選擇您預計前往的目的地（以台灣出發為基準）：</p>
+            @using (Html.BeginForm("JetLagSolutions", "JetLagMain", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label for="CountryID">選擇目的地：</label>
+                    @Html.DropDownList("CountryID", ViewBag.CountryList as List<SelectListItem>, "請選擇國家/城市", new { @class = "form-control" })
+                </div>
+                <button type="submit" class="search-btn">查詢建議</button>
+            }
+
+            @if (Model.TimeZoneSuggestion != null)
+            {
+                <div class="timezone-result">
+                    <h3>🌍 查詢結果</h3>
+                    <p><strong>目的地：</strong>@Model.TimeZoneSuggestion.DestinationCountry - @Model.TimeZoneSuggestion.DestinationCity</p>
+                    <p><strong>飛行方向：</strong>@Model.TimeZoneSuggestion.FlightDirection</p>
+                    <p><strong>與台灣時差：</strong>@Model.TimeZoneSuggestion.TimeDifference 小時</p>
+                    <p><strong>💡 建議調整天數：</strong><span>@Model.TimeZoneSuggestion.SuggestedDays 天</span></p>
+                </div>
+            }
+        </div>
         <div class="table-wrapper">
             <table class="jetlag-table">
                 <thead>
@@ -39,7 +62,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var topic in Model)
+                    @foreach (var topic in Model.TopicList)
                     {
                         <tr>
                             <td class="topic-title">@topic.Title</td>
@@ -65,7 +88,7 @@
             </table>
         </div>
 
-        @foreach (var topic in Model.Where(m => m.Title.Contains("時差")))
+        @foreach (var topic in Model.TopicList.Where(m => m.Title.Contains("時差")))
         {
             <div class="adjustment-block">
                 <h3>作息調整建議</h3>
