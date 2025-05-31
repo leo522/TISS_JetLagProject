@@ -1,7 +1,7 @@
 ﻿/* jetlag.css */
 
 body {
-    background-image: url('../pic/bg.png'); /* 相對於 CSS 路徑 */
+    /*background-image: url('../pic/bg.png');*/ /* 相對於 CSS 路徑 */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;

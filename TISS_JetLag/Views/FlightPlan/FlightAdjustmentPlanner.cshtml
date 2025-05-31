@@ -1,0 +1,196 @@
+﻿@model TISS_JetLag.ViewModels.FlightPlanInputViewModel
+@{
+    ViewBag.Title = "航班時差調整建議";
+    Layout = "~/Views/Shared/_JetLag.cshtml";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">✈️ 航班時差調整建議</h2>
+
+    @using (Html.BeginForm("CalculateFlightAdjustment", "FlightPlan", FormMethod.Post))
+    {
+        <div id="flightLegsContainer">
+            @for (int i = 0; i < Model.FlightLegs.Count; i++)
+            {
+                <div class="row g-3 mb-3 flight-leg-block border rounded p-3 bg-light">
+                    <div class="col-md-5">
+                        <label class="form-label">出發機場</label>
+                        @Html.DropDownListFor(m => m.FlightLegs[i].DepartureCity, ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select" })
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">抵達機場</label>
+                        @Html.DropDownListFor(m => m.FlightLegs[i].ArrivalCity, ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">出發時間（當地）</label>
+                        @Html.TextBoxFor(m => m.FlightLegs[i].DepartureTimeLocal, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">抵達時間（當地）</label>
+                        @Html.TextBoxFor(m => m.FlightLegs[i].ArrivalTimeLocal, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <button type="button" class="btn btn-secondary" id="addLegBtn"><i class="fas fa-plus-circle"></i> 新增航段</button>
+        </div>
+
+        <button type="submit" class="btn btn-success px-4"><i class="fas fa-search me-1"></i>查詢建議</button>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.ResultMessage))
+    {
+        <div class="alert alert-info mt-4">@Model.ResultMessage</div>
+    }
+
+    @if (Model.SleepAdjustmentSchedule?.Any() == true)
+    {
+        <h4 class="mt-4">🕒 作息調整建議表</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>調整日</th>
+                    <th>建議睡眠時間</th>
+                    <th>建議起床時間</th>
+                    <th>調整說明</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.SleepAdjustmentSchedule)
+                {
+                    <tr>
+                        <td>第 @item.DayIndex 天</td>
+                        <td>@item.SuggestedSleepTime</td>
+                        <td>@item.SuggestedWakeTime</td>
+                        <td>@item.AdjustmentNote</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (Model.GanttSchedule?.Any() == true)
+    {
+        <h4 class="mt-4">📆 調整排程甘特圖</h4>
+        <div class="overflow-auto">
+            <canvas id="ganttChart" height="320"></canvas>
+        </div>
+        <script id="ganttData" type="application/json">
+            @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GanttSchedule))
+        </script>
+    }
+</div>
+
+<script>
+    let legIndex = @Model.FlightLegs.Count;
+
+    document.getElementById("addLegBtn").addEventListener("click", function () {
+        const container = document.getElementById("flightLegsContainer");
+        const template = `
+        <div class="row g-3 mb-3 flight-leg-block border rounded p-3 bg-light">
+            <div class="col-md-5">
+                <label class="form-label">出發機場</label>
+                <select name="FlightLegs[${legIndex}].DepartureCity" class="form-select">
+                    @foreach (var city in ViewBag.CityList as List<SelectListItem>)
+                    {
+                        <option value="@city.Value">@city.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">抵達機場</label>
+                <select name="FlightLegs[${legIndex}].ArrivalCity" class="form-select">
+                    @foreach (var city in ViewBag.CityList as List<SelectListItem>)
+                    {
+                        <option value="@city.Value">@city.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">出發時間（當地）</label>
+                <input type="datetime-local" name="FlightLegs[${legIndex}].DepartureTimeLocal" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">抵達時間（當地）</label>
+                <input type="datetime-local" name="FlightLegs[${legIndex}].ArrivalTimeLocal" class="form-control" />
+            </div>
+            <div class="col-12 text-end">
+                <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
+            </div>
+        </div>`;
+        container.insertAdjacentHTML("beforeend", template);
+        legIndex++;
+    });
+
+    document.addEventListener("click", function (e) {
+        if (e.target.closest(".remove-leg-btn")) {
+            e.target.closest(".flight-leg-block").remove();
+        }
+    });
+
+   document.addEventListener("DOMContentLoaded", function () {
+    const rawData = JSON.parse(document.getElementById("ganttData")?.textContent || "[]");
+
+    if (!rawData.length) return;
+
+    const ctx = document.getElementById("ganttChart").getContext("2d");
+
+    const datasets = rawData.map(item => ({
+        label: item.Label,
+        data: [{
+            x: item.Start,
+            x2: item.End,
+            y: item.Category || item.Label,
+            tooltipText: item.TooltipText || item.Label
+        }],
+        backgroundColor: item.Color || "#6c757d",
+        borderRadius: 5,
+    }));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: { datasets },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            parsing: true, // ✅ 使用預設 parsing 模式
+        scales: {
+        x: {
+                type: 'time',
+            time: {
+                    unit: 'hour',
+                    tooltipFormat: 'MM/dd HH:mm',
+                    displayFormats: { hour: 'MM/dd HH:mm' }
+                },
+            title: { display: true, text: '時間軸' },
+                min: '@ViewBag.GanttMin',
+                max: '@ViewBag.GanttMax'
+        },
+        y: {
+            type: 'category',
+            labels: [...new Set(rawData.map(d => d.Category))],
+            title: { display: true, text: '任務分類' }
+            }
+        },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const data = context.raw;
+                            const start = new Date(data.x);
+                            const end = new Date(data.x2);
+                            return `${data.tooltipText}\n${start.toLocaleString()} - ${end.toLocaleString()}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>

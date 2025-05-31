@@ -17,6 +17,7 @@
         <AssociationConnector Association="TISS_JetLagSolutionsModel.FK__TopicSymp__Sympt__3C69FB99" ManuallyRouted="false" />
         <AssociationConnector Association="TISS_JetLagSolutionsModel.FK__TopicSymp__Topic__3B75D760" ManuallyRouted="false" />
         <EntityTypeShape EntityType="TISS_JetLagSolutionsModel.CountryTimeZone" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="TISS_JetLagSolutionsModel.AirportInfo" Width="1.5" PointX="7.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

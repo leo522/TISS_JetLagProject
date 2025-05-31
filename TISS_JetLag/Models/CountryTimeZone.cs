@@ -20,5 +20,6 @@ namespace TISS_JetLag.Models
         public double Longitude { get; set; }
         public int TimeZoneOffset { get; set; }
         public string Remark { get; set; }
+        public Nullable<double> Latitude { get; set; }
     }
 }

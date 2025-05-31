@@ -1,0 +1,51 @@
+﻿# =========================
+# Visual Studio 專案忽略清單
+# =========================
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS 設定資料夾
+.vs/
+
+# 編譯結果
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.log
+*.tlog
+
+# NuGet 套件與還原檔案
+packages/
+*.nupkg
+project.lock.json
+project.assets.json
+
+# Web 發行設定
+*.publish.xml
+*.pubxml
+*.publishproj
+
+# 資料庫檔案與快取
+*.dbmdl
+*.pdb
+*.cache
+
+# 可執行與暫存檔案
+*.zip
+*.exe
+*.dll
+*.tmp
+*.swp
+
+# 前端相關暫存（如 Node.js / npm）
+node_modules/
+dist/
+.env
+
+# ASP.NET Core（若有使用）
+appsettings.Development.json
+secrets.json
