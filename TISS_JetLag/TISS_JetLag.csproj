@@ -208,6 +208,7 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="css\bgStyle.css" />
+    <Content Include="css\FlightPlanBgStyle.css" />
     <Content Include="css\FlightPlanStyle.css" />
     <Content Include="css\jetlag-explanationStyle.css" />
     <Content Include="css\jetlag-solutionsStyle.css" />
@@ -2321,6 +2322,7 @@
       <LastGenOutput>JetLagSolutionsModel.cs</LastGenOutput>
     </Content>
     <Content Include="pic\bg.png" />
+    <Content Include="pic\DawnHorizon.png" />
     <Content Include="pic\favicon.svg" />
     <Content Include="pic\TISS標題.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -2418,6 +2420,7 @@
     <Content Include="Views\JetLagMain\JetLagSolutions.cshtml" />
     <Content Include="Views\JetLagExplanation\Explanation.cshtml" />
     <Content Include="Views\FlightPlan\FlightAdjustmentPlanner.cshtml" />
+    <Content Include="Views\Shared\_FlightPlannerLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

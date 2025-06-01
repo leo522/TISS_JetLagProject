@@ -1,7 +1,7 @@
 ﻿@model TISS_JetLag.ViewModels.FlightPlanInputViewModel
 @{
     ViewBag.Title = "航班時差調整建議";
-    Layout = "~/Views/Shared/_JetLag.cshtml";
+    Layout = "~/Views/Shared/_FlightPlannerLayout.cshtml";
 }
 
 <div class="container py-4">
@@ -41,6 +41,9 @@
         </div>
 
         <button type="submit" class="btn btn-success px-4"><i class="fas fa-search me-1"></i>查詢建議</button>
+        <a href="@Url.Action("FlightAdjustmentPlanner", "FlightPlan")" class="btn btn-primary ms-2">
+            <i class="fas fa-undo"></i> 清除重填
+        </a>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.ResultMessage))

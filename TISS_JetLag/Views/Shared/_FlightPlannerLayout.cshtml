@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>旅行疲勞&時差之對策</title>
+    <link rel="icon" href="~/pic/favicon.svg" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/FlightPlanBgStyle.css" rel="stylesheet" />
+    <link href="~/css/bgStyle.css" rel="stylesheet" />
+    <link href="~/fontawesome/css/all.min.css" rel="stylesheet" />
+    <script src="~/SweetAlert2/sweetalert2@11.js"></script>
+    <script src="~/SweetAlert2/sweetalert2.all.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="~/fontawesome/js/all.min.js"></script>
+    <script src="~/ChartScripts/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+    <script src="~/ChartScripts/chartjs-plugin-datalabels.js"></script>
+</head>
+<body>
+    <header class="page-header">
+        <img src="~/pic/TISS標題.png" alt="Logo" class="logo" />
+    </header>
+    <main class="page-content">
+        @RenderBody()
+    </main>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
