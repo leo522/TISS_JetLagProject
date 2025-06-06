@@ -3,6 +3,26 @@
     ViewBag.Title = "航班時差調整建議";
     Layout = "~/Views/Shared/_FlightPlannerLayout.cshtml";
 }
+<script src="~/FlightJS/FlightLegManager.js"></script>
+
+<!-- 提供城市下拉 HTML 給 JS 模組使用 -->
+<script id="cityOptions" type="text/template">
+    @foreach (var city in ViewBag.CityList as List<SelectListItem>)
+    {
+        <text>
+            <option value="@city.Value">@city.Text</option>
+        </text>
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const optionsHtml = document.getElementById("cityOptions")?.innerHTML || "";
+        FlightLegManager.setCityOptions(optionsHtml.trim());
+        FlightLegManager.init(@Model.FlightLegs.Count);
+    });
+</script>
+
 
 <div class="container py-4">
     <h2 class="fw-bold mb-4">✈️ 航班時差調整建議</h2>
@@ -89,111 +109,11 @@
     }
 </div>
 
+<!-- 初始化 JS 模組 -->
 <script>
-    let legIndex = @Model.FlightLegs.Count;
-
-    document.getElementById("addLegBtn").addEventListener("click", function () {
-        const container = document.getElementById("flightLegsContainer");
-        const template = `
-        <div class="row g-3 mb-3 flight-leg-block border rounded p-3 bg-light">
-            <div class="col-md-5">
-                <label class="form-label">出發機場</label>
-                <select name="FlightLegs[${legIndex}].DepartureCity" class="form-select">
-                    @foreach (var city in ViewBag.CityList as List<SelectListItem>)
-                    {
-                        <option value="@city.Value">@city.Text</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-5">
-                <label class="form-label">抵達機場</label>
-                <select name="FlightLegs[${legIndex}].ArrivalCity" class="form-select">
-                    @foreach (var city in ViewBag.CityList as List<SelectListItem>)
-                    {
-                        <option value="@city.Value">@city.Text</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">出發時間（當地）</label>
-                <input type="datetime-local" name="FlightLegs[${legIndex}].DepartureTimeLocal" class="form-control" />
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">抵達時間（當地）</label>
-                <input type="datetime-local" name="FlightLegs[${legIndex}].ArrivalTimeLocal" class="form-control" />
-            </div>
-            <div class="col-12 text-end">
-                <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
-            </div>
-        </div>`;
-        container.insertAdjacentHTML("beforeend", template);
-        legIndex++;
+    document.addEventListener("DOMContentLoaded", function () {
+        const optionsHtml = document.getElementById("cityOptions")?.innerHTML || "";
+        FlightLegManager.setCityOptions(optionsHtml.trim());
+        FlightLegManager.init(@Model.FlightLegs.Count);
     });
-
-    document.addEventListener("click", function (e) {
-        if (e.target.closest(".remove-leg-btn")) {
-            e.target.closest(".flight-leg-block").remove();
-        }
-    });
-
-   document.addEventListener("DOMContentLoaded", function () {
-    const rawData = JSON.parse(document.getElementById("ganttData")?.textContent || "[]");
-
-    if (!rawData.length) return;
-
-    const ctx = document.getElementById("ganttChart").getContext("2d");
-
-    const datasets = rawData.map(item => ({
-        label: item.Label,
-        data: [{
-            x: item.Start,
-            x2: item.End,
-            y: item.Category || item.Label,
-            tooltipText: item.TooltipText || item.Label
-        }],
-        backgroundColor: item.Color || "#6c757d",
-        borderRadius: 5,
-    }));
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: { datasets },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            parsing: true, // ✅ 使用預設 parsing 模式
-        scales: {
-        x: {
-                type: 'time',
-            time: {
-                    unit: 'hour',
-                    tooltipFormat: 'MM/dd HH:mm',
-                    displayFormats: { hour: 'MM/dd HH:mm' }
-                },
-            title: { display: true, text: '時間軸' },
-                min: '@ViewBag.GanttMin',
-                max: '@ViewBag.GanttMax'
-        },
-        y: {
-            type: 'category',
-            labels: [...new Set(rawData.map(d => d.Category))],
-            title: { display: true, text: '任務分類' }
-            }
-        },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const data = context.raw;
-                            const start = new Date(data.x);
-                            const end = new Date(data.x2);
-                            return `${data.tooltipText}\n${start.toLocaleString()} - ${end.toLocaleString()}`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-});
 </script>

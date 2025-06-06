@@ -213,6 +213,7 @@
     <Content Include="css\jetlag-explanationStyle.css" />
     <Content Include="css\jetlag-solutionsStyle.css" />
     <Content Include="favicon.ico" />
+    <Content Include="FlightJS\FlightLegManager.js" />
     <Content Include="fontawesome\css\all.css" />
     <Content Include="fontawesome\css\all.min.css" />
     <Content Include="fontawesome\css\brands.css" />
