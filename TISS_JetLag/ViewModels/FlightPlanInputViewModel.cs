@@ -37,31 +37,4 @@ namespace TISS_JetLag.ViewModels
         public List<GanttSegmentViewModel> GanttSchedule { get; set; } = new List<GanttSegmentViewModel>();
     }
     #endregion
-
-    #region 多段航班輸入欄位
-    public class FlightLegViewModel
-    {
-        public string DepartureCity { get; set; }
-        public string ArrivalCity { get; set; }
-        public DateTime DepartureTimeLocal { get; set; }
-        public DateTime ArrivalTimeLocal { get; set; }
-
-        public int DepartureTimeZoneOffset { get; set; }
-        public int ArrivalTimeZoneOffset { get; set; }
-        public double DepartureLongitude { get; set; }
-        public double ArrivalLongitude { get; set; }
-    }
-    #endregion
-
-    #region 甘特圖
-    public class GanttSegmentViewModel
-    {
-        public string Label { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-        public string Color { get; set; } //可改為根據分類決定
-        public string TooltipText { get; set; } //新增 tooltip 說明文字
-        public string Category { get; set; } //新增類別（如：起床/睡眠/登機）
-    }
-    #endregion
 }

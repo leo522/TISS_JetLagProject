@@ -119,45 +119,70 @@ namespace TISS_JetLag.Controllers
             // 加入去程航段
             foreach (var leg in model.OutboundLegs)
             {
+                var depTz = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == leg.DepartureCity)?.TimeZoneOffset ?? 0;
+                var arrTz = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == leg.ArrivalCity)?.TimeZoneOffset ?? 0;
+
+                var depUtc = TimeZoneConverter.ToUtc(leg.DepartureTimeLocal, depTz);
+                var arrUtc = TimeZoneConverter.ToUtc(leg.ArrivalTimeLocal, arrTz);
+
                 ganttList.Add(new GanttSegmentViewModel
                 {
                     Label = $"✈️ [去程] {leg.DepartureCity} → {leg.ArrivalCity}",
-                    Start = leg.DepartureTimeLocal,
-                    End = leg.ArrivalTimeLocal,
+                    Start = depUtc,
+                    End = arrUtc,
                     Color = "#F5B041",
-                    TooltipText = $"起飛：{leg.DepartureTimeLocal:MM/dd HH:mm}，抵達：{leg.ArrivalTimeLocal:MM/dd HH:mm}",
+                    TooltipText = $"✈️ [去程] {leg.DepartureCity} → {leg.ArrivalCity}\n" +
+                        $"起飛（當地）：{leg.DepartureTimeLocal:MM/dd HH:mm} (UTC{depTz:+0;-#})\n" +
+                        $"抵達（當地）：{leg.ArrivalTimeLocal:MM/dd HH:mm} (UTC{arrTz:+0;-#})\n" +
+                        $"顯示時間軸（UTC）：{depUtc:MM/dd HH:mm} → {arrUtc:MM/dd HH:mm}",
                     Category = "航班"
                 });
             }
 
-            // 加入回程航段
+
             foreach (var leg in model.ReturnLegs)
             {
+                var depTz = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == leg.DepartureCity)?.TimeZoneOffset ?? 0;
+                var arrTz = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == leg.ArrivalCity)?.TimeZoneOffset ?? 0;
+
+                var depUtc = TimeZoneConverter.ToUtc(leg.DepartureTimeLocal, depTz);
+                var arrUtc = TimeZoneConverter.ToUtc(leg.ArrivalTimeLocal, arrTz);
+
                 ganttList.Add(new GanttSegmentViewModel
                 {
                     Label = $"✈️ [回程] {leg.DepartureCity} → {leg.ArrivalCity}",
-                    Start = leg.DepartureTimeLocal,
-                    End = leg.ArrivalTimeLocal,
+                    Start = depUtc,
+                    End = arrUtc,
                     Color = "#D6A2E8",
-                    TooltipText = $"起飛：{leg.DepartureTimeLocal:MM/dd HH:mm}，抵達：{leg.ArrivalTimeLocal:MM/dd HH:mm}",
+                    TooltipText = $"✈️ [回程] {leg.DepartureCity} → {leg.ArrivalCity}\n" +
+                        $"起飛（當地）：{leg.DepartureTimeLocal:MM/dd HH:mm} (UTC{depTz:+0;-#})\n" +
+                        $"抵達（當地）：{leg.ArrivalTimeLocal:MM/dd HH:mm} (UTC{arrTz:+0;-#})\n" +
+                        $"顯示時間軸（UTC）：{depUtc:MM/dd HH:mm} → {arrUtc:MM/dd HH:mm}",
                     Category = "航班"
                 });
             }
 
-            // 機上作息
+            // 機上作息，把出發地的時區偏移抓出來做轉換基準
+            var depTzOffset = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == model.DepartureCity)?.TimeZoneOffset ?? 0;
+            var departureBaseUtc = TimeZoneConverter.ToUtc(model.DepartureTimeLocal, depTzOffset);
+
             foreach (var seg in model.InFlightSchedule)
             {
                 if (seg.SegmentType.Contains("睡眠") && seg.TimeRange.Contains("-"))
                 {
                     var parts = seg.TimeRange.Split('-');
-                    if (DateTime.TryParse($"{model.DepartureTimeLocal.Date:yyyy-MM-dd} {parts[0].Trim()}", out var start) &&
-                        DateTime.TryParse($"{model.DepartureTimeLocal.Date:yyyy-MM-dd} {parts[1].Trim()}", out var end))
+
+                    if (TimeSpan.TryParse(parts[0].Trim(), out var startSpan) &&
+                        TimeSpan.TryParse(parts[1].Trim(), out var endSpan))
                     {
+                        var startUtc = departureBaseUtc.Date.Add(startSpan);
+                        var endUtc = departureBaseUtc.Date.Add(endSpan);
+
                         ganttList.Add(new GanttSegmentViewModel
                         {
                             Label = "機上睡眠",
-                            Start = start,
-                            End = end,
+                            Start = startUtc,
+                            End = endUtc,
                             Color = "#A9CCE3",
                             TooltipText = seg.Description,
                             Category = "機上作息"

@@ -149,8 +149,11 @@
     <Compile Include="Utility\AdjustmentStrategyService.cs" />
     <Compile Include="Utility\SleepMealPlannerService.cs" />
     <Compile Include="Utility\SunlightTimeService.cs" />
+    <Compile Include="Utility\TimeZoneConverter.cs" />
     <Compile Include="ViewModels\DailyAdjustmentViewModel.cs" />
+    <Compile Include="ViewModels\FlightLegViewModel.cs" />
     <Compile Include="ViewModels\FlightPlanInputViewModel.cs" />
+    <Compile Include="ViewModels\GanttSegmentViewModel.cs" />
     <Compile Include="ViewModels\JetLagMainViewModel.cs" />
     <Compile Include="Models\JetLagSolutionsModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -213,6 +216,7 @@
     <Content Include="css\jetlag-explanationStyle.css" />
     <Content Include="css\jetlag-solutionsStyle.css" />
     <Content Include="favicon.ico" />
+    <Content Include="js\FlightJS\FlightLegFieldValidator.js" />
     <Content Include="js\FlightJS\FlightLegManager.js" />
     <Content Include="fontawesome\css\all.css" />
     <Content Include="fontawesome\css\all.min.css" />
@@ -2313,6 +2317,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="js\Chart-Adapter\chartjs-adapter-date-fns%403.js" />
+    <Content Include="js\FlightJS\FlightLegValidator.js" />
     <Content Include="Models\JetLagSolutionsModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>JetLagSolutionsModel.Context.cs</LastGenOutput>

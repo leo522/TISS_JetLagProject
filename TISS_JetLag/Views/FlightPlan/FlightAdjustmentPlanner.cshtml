@@ -4,6 +4,8 @@
     Layout = "~/Views/Shared/_FlightPlannerLayout.cshtml";
 }
 <script src="~/js/FlightJS/FlightLegManager.js"></script>
+<script src="~/js/FlightJS/FlightLegValidator.js"></script> @*出發時間不能晚於抵達時間驗證*@
+<script src="~/js/FlightJS/FlightLegFieldValidator.js"></script>@*驗證機場與時間不可為空*@
 <script id="cityOptions" type="text/template">
     @foreach (var city in ViewBag.CityList as List<SelectListItem>)
     {
@@ -136,5 +138,8 @@
         const optionsHtml = document.getElementById("cityOptions")?.innerHTML || "";
         FlightLegManager.setCityOptions(optionsHtml.trim());
         FlightLegManager.init(@Model.OutboundLegs.Count, @Model.ReturnLegs.Count);
+
+        FlightLegValidator.bindFormValidation("form");
+        FlightLegFieldValidator.bindFormValidation("form");
     });
 </script>
