@@ -26,21 +26,16 @@ namespace TISS_JetLag.Controllers
         [HttpPost]
         public async Task<ActionResult> CalculateFlightAdjustment(FlightPlanInputViewModel model)
         {
-            var firstLeg = model.FlightLegs?.FirstOrDefault();
-            var lastLeg = model.FlightLegs?.LastOrDefault();
+            var firstLeg = model.OutboundLegs?.FirstOrDefault();
+            var lastLeg = model.ReturnLegs?.LastOrDefault();
 
             if (firstLeg == null || lastLeg == null)
             {
-                ModelState.AddModelError("", "請至少輸入一筆航班資料。");
+                ModelState.AddModelError("", "請至少輸入一筆去程與回程的航班資料。");
                 ViewBag.CityList = GetSelectableAirports();
                 return View("FlightAdjustmentPlanner", model);
             }
 
-            //城市為主
-            //var dep = _db.CountryTimeZone.FirstOrDefault(c => c.CityName == firstLeg.DepartureCity);
-            //var arr = _db.CountryTimeZone.FirstOrDefault(c => c.CityName == lastLeg.ArrivalCity);
-
-            // 使用機場資料庫來獲取城市資訊
             var dep = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == firstLeg.DepartureCity);
             var arr = _db.AirportInfo.FirstOrDefault(a => a.AirportCode == lastLeg.ArrivalCity);
 
@@ -51,6 +46,7 @@ namespace TISS_JetLag.Controllers
                 return View("FlightAdjustmentPlanner", model);
             }
 
+            // 以去程出發地與回程抵達地為主體
             model.DepartureCity = firstLeg.DepartureCity;
             model.ArrivalCity = lastLeg.ArrivalCity;
             model.DepartureTimeLocal = firstLeg.DepartureTimeLocal;
@@ -73,16 +69,14 @@ namespace TISS_JetLag.Controllers
             var today = DateTime.Today;
 
             model.DepartureSunlight = await SunlightTimeService.GetSunlightTimeAsync(
-             model.DepartureCity, dep.Latitude, dep.Longitude, dep.TimeZoneOffset, today);
+                model.DepartureCity, dep.Latitude, dep.Longitude, dep.TimeZoneOffset, today);
 
             model.ArrivalSunlight = await SunlightTimeService.GetSunlightTimeAsync(
                 model.ArrivalCity, arr.Latitude, arr.Longitude, arr.TimeZoneOffset, today.AddDays(1));
 
-            // 基本作息時間
             var baseSleepTime = new TimeSpan(23, 0, 0);
             var baseWakeTime = new TimeSpan(7, 0, 0);
 
-            // 日出日落時間參數（提供給調整與機上作息）
             var sunriseTime = model.ArrivalSunlight?.SunriseLocal.TimeOfDay ?? new TimeSpan(6, 0, 0);
             var sunsetTime = model.ArrivalSunlight?.SunsetLocal.TimeOfDay ?? new TimeSpan(18, 0, 0);
 
@@ -101,7 +95,6 @@ namespace TISS_JetLag.Controllers
                 model.ArrivalSunlight?.SunriseLocal ?? model.ArrivalTimeLocal.AddHours(2),
                 model.ArrivalSunlight?.SunsetLocal ?? model.ArrivalTimeLocal.AddHours(10));
 
-            // 建立甘特圖
             var ganttList = new List<GanttSegmentViewModel>();
             var baseDate = model.DepartureTimeLocal.Date.AddDays(-model.SuggestedAdjustmentDays);
 
@@ -123,11 +116,12 @@ namespace TISS_JetLag.Controllers
                 }
             }
 
-            foreach (var leg in model.FlightLegs)
+            // 加入去程航段
+            foreach (var leg in model.OutboundLegs)
             {
                 ganttList.Add(new GanttSegmentViewModel
                 {
-                    Label = $"✈️ {leg.DepartureCity} → {leg.ArrivalCity}",
+                    Label = $"✈️ [去程] {leg.DepartureCity} → {leg.ArrivalCity}",
                     Start = leg.DepartureTimeLocal,
                     End = leg.ArrivalTimeLocal,
                     Color = "#F5B041",
@@ -136,6 +130,21 @@ namespace TISS_JetLag.Controllers
                 });
             }
 
+            // 加入回程航段
+            foreach (var leg in model.ReturnLegs)
+            {
+                ganttList.Add(new GanttSegmentViewModel
+                {
+                    Label = $"✈️ [回程] {leg.DepartureCity} → {leg.ArrivalCity}",
+                    Start = leg.DepartureTimeLocal,
+                    End = leg.ArrivalTimeLocal,
+                    Color = "#D6A2E8",
+                    TooltipText = $"起飛：{leg.DepartureTimeLocal:MM/dd HH:mm}，抵達：{leg.ArrivalTimeLocal:MM/dd HH:mm}",
+                    Category = "航班"
+                });
+            }
+
+            // 機上作息
             foreach (var seg in model.InFlightSchedule)
             {
                 if (seg.SegmentType.Contains("睡眠") && seg.TimeRange.Contains("-"))
@@ -159,7 +168,6 @@ namespace TISS_JetLag.Controllers
 
             model.GanttSchedule = ganttList;
 
-            //計算甘特圖時間軸範圍
             if (ganttList.Any())
             {
                 var minTime = ganttList.Min(g => g.Start).AddHours(-2);
@@ -171,19 +179,6 @@ namespace TISS_JetLag.Controllers
             ViewBag.CityList = GetSelectableAirports();
             return View("FlightAdjustmentPlanner", model);
         }
-        #endregion
-
-        #region 城市清單（下拉用）
-        //private List<SelectListItem> GetSelectableCities()
-        //{
-        //    return _db.CountryTimeZone.OrderBy(c => c.CountryName).ToList()
-        //    .Select(c => new SelectListItem
-        //    {
-        //        Value = c.CityName,
-        //        Text = $"{c.CountryName} - {c.CityName}" // C# 字串插值可正常執行
-        //    }).ToList();
-        //}
-
         #endregion
 
         #region 機場清單（下拉用）
@@ -199,3 +194,15 @@ namespace TISS_JetLag.Controllers
         #endregion
     }
 }
+
+#region 城市清單（下拉用）
+//private List<SelectListItem> GetSelectableCities()
+//{
+//    return _db.CountryTimeZone.OrderBy(c => c.CountryName).ToList()
+//    .Select(c => new SelectListItem
+//    {
+//        Value = c.CityName,
+//        Text = $"{c.CountryName} - {c.CityName}" // C# 字串插值可正常執行
+//    }).ToList();
+//}
+#endregion

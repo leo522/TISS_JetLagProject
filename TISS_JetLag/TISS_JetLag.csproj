@@ -213,7 +213,7 @@
     <Content Include="css\jetlag-explanationStyle.css" />
     <Content Include="css\jetlag-solutionsStyle.css" />
     <Content Include="favicon.ico" />
-    <Content Include="FlightJS\FlightLegManager.js" />
+    <Content Include="js\FlightJS\FlightLegManager.js" />
     <Content Include="fontawesome\css\all.css" />
     <Content Include="fontawesome\css\all.min.css" />
     <Content Include="fontawesome\css\brands.css" />
@@ -2312,6 +2312,7 @@
     <Content Include="fontawesome\svgs\solid\z.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="js\Chart-Adapter\chartjs-adapter-date-fns%403.js" />
     <Content Include="Models\JetLagSolutionsModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>JetLagSolutionsModel.Context.cs</LastGenOutput>
@@ -2414,9 +2415,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_JetLag.cshtml" />
     <Content Include="Views\JetLagMain\JetLagSolutions.cshtml" />
     <Content Include="Views\JetLagExplanation\Explanation.cshtml" />

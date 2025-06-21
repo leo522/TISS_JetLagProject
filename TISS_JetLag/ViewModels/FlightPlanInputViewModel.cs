@@ -8,8 +8,9 @@ namespace TISS_JetLag.ViewModels
     #region 航班資訊建議
     public class FlightPlanInputViewModel
     {
-        //多段航段輸入
-        public List<FlightLegViewModel> FlightLegs { get; set; } = new List<FlightLegViewModel>();
+        // 分開管理去程與回程航段
+        public List<FlightLegViewModel> OutboundLegs { get; set; } = new List<FlightLegViewModel>();
+        public List<FlightLegViewModel> ReturnLegs { get; set; } = new List<FlightLegViewModel>();
 
         //舊欄位保留 (僅供預設單段用，不再直接運算)
         public string DepartureCity { get; set; }
