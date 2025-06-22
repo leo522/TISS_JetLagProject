@@ -1,0 +1,99 @@
+﻿@model List<TISS_JetLag.ViewModels.GanttSegmentViewModel>
+
+@{
+    var segments = Model.OrderBy(s => s.Start).ToList();
+
+    // Group by date and location
+    var groupedByDay = segments
+        .GroupBy(s => new { Date = s.Start.Date, Location = s.LocationLabel })
+        .OrderBy(g => g.Key.Date)
+        .ToList();
+
+    Func<DateTime, DateTime, string> GetWidth = (start, end) => $"{(end - start).TotalHours * 40}px";
+    Func<DateTime, DateTime, DateTime, string> GetLeft = (min, start, _) => $"{(start - min).TotalHours * 40}px";
+}
+
+<style>
+    .gantt-container {
+        padding: 20px;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    .gantt-day-block {
+        margin-bottom: 40px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 20px;
+    }
+
+    .gantt-label {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .gantt-label::before {
+            content: "📅";
+        }
+
+    .gantt-row {
+        position: relative;
+        min-height: 36px;
+        margin-bottom: 14px;
+    }
+
+    .gantt-segment {
+        position: absolute;
+        display: block;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #fff;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.5;
+        z-index: 10;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        min-width: 140px;
+        max-width: 300px;
+        overflow-wrap: break-word;
+    }
+</style>
+
+<div class="gantt-container">
+    @foreach (var group in groupedByDay)
+    {
+        var minTime = group.Min(s => s.Start).Date;
+        var categories = group.Select(s => s.Category).Distinct().OrderBy(c => c);
+
+        <div class="gantt-day-block">
+            <div class="gantt-label">@group.Key.Date.ToString("M/d") @group.Key.Location</div>
+
+            @foreach (var category in categories)
+            {
+                <div class="gantt-row">
+                    @foreach (var segment in group.Where(s => s.Category == category).OrderBy(s => s.Start))
+                    {
+                        var bg = segment.Color;
+                        if (segment.Category.Contains("起飛")) { bg = "#E67E22"; }
+                        else if (segment.Category.Contains("降落")) { bg = "#8E44AD"; }
+                        else if (segment.Category.Contains("睡眠")) { bg = "#3498DB"; }
+                        else if (segment.Category.Contains("用餐")) { bg = "#2ECC71"; }
+                        else if (segment.Category.Contains("清醒")) { bg = "#F1C40F"; }
+
+                        <div class="gantt-segment"
+                             style="left:@GetLeft(minTime, segment.Start, segment.End); width:@GetWidth(segment.Start, segment.End); background:@bg">
+                            <div>@segment.Label</div>
+                            @if (!string.IsNullOrEmpty(segment.TooltipText))
+                            {
+                                <div style="font-size: 11px;">@segment.TooltipText</div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -1,24 +1,23 @@
 ﻿@model TISS_JetLag.ViewModels.FlightPlanInputViewModel
+@using Newtonsoft.Json
 @{
     ViewBag.Title = "航班時差調整建議";
     Layout = "~/Views/Shared/_FlightPlannerLayout.cshtml";
 }
 <script src="~/js/FlightJS/FlightLegManager.js"></script>
-<script src="~/js/FlightJS/FlightLegValidator.js"></script> @*出發時間不能晚於抵達時間驗證*@
-<script src="~/js/FlightJS/FlightLegFieldValidator.js"></script>@*驗證機場與時間不可為空*@
-<script id="cityOptions" type="text/template">
-    @foreach (var city in ViewBag.CityList as List<SelectListItem>)
-    {
-        <text>
-            <option value="@city.Value">@city.Text</option>
-        </text>
-    }
+<script src="~/js/FlightJS/FlightLegValidator.js"></script>
+<script src="~/js/FlightJS/FlightLegFieldValidator.js"></script>
+<script src="~/js/GanttChart/GanttChartRenderer.js"></script>
+<script id="cityOptionsJson" type="application/json">
+    @Html.Raw(Json.Encode(ViewBag.CityList))
 </script>
 
 <div class="container py-4">
     <h2 class="fw-bold mb-4">✈️ 航班時差調整建議</h2>
     @using (Html.BeginForm("CalculateFlightAdjustment", "FlightPlan", FormMethod.Post))
     {
+        @Html.AntiForgeryToken()
+
         <!-- 去程航段 -->
         <h4 class="text-success mb-4 mt-4"><i class="fas fa-plane-departure me-2"></i>去程航段</h4>
         <div id="outboundLegsContainer">
@@ -27,19 +26,19 @@
                 <div class="row g-3 mb-3 flight-leg-block border rounded p-3 bg-light">
                     <div class="col-md-5">
                         <label class="form-label">出發機場</label>
-                        @Html.DropDownList($"OutboundLegs[{i}].DepartureCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select" })
+                        @Html.DropDownList($"OutboundLegs[{i}].DepartureCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">抵達機場</label>
-                        @Html.DropDownList($"OutboundLegs[{i}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select" })
+                        @Html.DropDownList($"OutboundLegs[{i}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">出發時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="OutboundLegs[@i].DepartureTimeLocal" value="@Model.OutboundLegs[i].DepartureTimeLocal.ToString("yyyy-MM-ddTHH:mm")" />
+                        <input type="datetime-local" class="form-control" name="OutboundLegs[i].DepartureTimeLocal" value="@Model.OutboundLegs[i].DepartureTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">抵達時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="OutboundLegs[@i].ArrivalTimeLocal" value="@Model.OutboundLegs[i].ArrivalTimeLocal.ToString("yyyy-MM-ddTHH:mm")" />
+                        <input type="datetime-local" class="form-control" name="OutboundLegs[i].ArrivalTimeLocal" value="@Model.OutboundLegs[i].ArrivalTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
                     </div>
                     <div class="col-12 text-end">
                         <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
@@ -54,24 +53,24 @@
         <!-- 回程航段 -->
         <h4 class="text-primary mb-4 mt-5"><i class="fas fa-plane-arrival me-2"></i>回程航段</h4>
         <div id="returnLegsContainer">
-            @for (int i = 0; i < Model.ReturnLegs.Count; i++)
+            @for (int j = 0; j < Model.ReturnLegs.Count; j++)
             {
                 <div class="row g-3 mb-3 flight-leg-block border rounded p-3 bg-light">
                     <div class="col-md-5">
                         <label class="form-label">出發機場</label>
-                        @Html.DropDownList($"ReturnLegs[{i}].DepartureCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select" })
+                        @Html.DropDownList($"ReturnLegs[{j}].DepartureCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">抵達機場</label>
-                        @Html.DropDownList($"ReturnLegs[{i}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select" })
+                        @Html.DropDownList($"ReturnLegs[{j}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">出發時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="ReturnLegs[@i].DepartureTimeLocal" value="@Model.ReturnLegs[i].DepartureTimeLocal.ToString("yyyy-MM-ddTHH:mm")" />
+                        <input type="datetime-local" class="form-control" name="ReturnLegs[j].DepartureTimeLocal" value="@Model.ReturnLegs[j].DepartureTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">抵達時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="ReturnLegs[@i].ArrivalTimeLocal" value="@Model.ReturnLegs[i].ArrivalTimeLocal.ToString("yyyy-MM-ddTHH:mm")" />
+                        <input type="datetime-local" class="form-control" name="ReturnLegs[j].ArrivalTimeLocal" value="@Model.ReturnLegs[j].ArrivalTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
                     </div>
                     <div class="col-12 text-end">
                         <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
@@ -83,7 +82,6 @@
             <button type="button" class="btn btn-outline-primary" id="addReturnLegBtn"><i class="fas fa-plus-circle me-1"></i> 新增回程航段</button>
         </div>
 
-        <!-- 提交按鈕 -->
         <button type="submit" class="btn btn-success px-4"><i class="fas fa-search me-1"></i>查詢建議</button>
         <a href="@Url.Action("FlightAdjustmentPlanner", "FlightPlan")" class="btn btn-primary ms-2">
             <i class="fas fa-undo"></i> 清除重填
@@ -92,54 +90,46 @@
 
     @if (!string.IsNullOrWhiteSpace(Model.ResultMessage))
     {
-        <div class="alert alert-info mt-4">@Model.ResultMessage</div>
-    }
-
-    @if (Model.SleepAdjustmentSchedule?.Any() == true)
-    {
-        <h4 class="mt-4">🕒 作息調整建議表</h4>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>調整日</th>
-                    <th>建議睡眠時間</th>
-                    <th>建議起床時間</th>
-                    <th>調整說明</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.SleepAdjustmentSchedule)
-                {
-                    <tr>
-                        <td>第 @item.DayIndex 天</td>
-                        <td>@item.SuggestedSleepTime</td>
-                        <td>@item.SuggestedWakeTime</td>
-                        <td>@item.AdjustmentNote</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="alert alert-info mt-4">@Html.Encode(Model.ResultMessage)</div>
     }
 
     @if (Model.GanttSchedule?.Any() == true)
     {
         <h4 class="mt-4">📆 調整排程甘特圖</h4>
-        <div class="overflow-auto">
-            <canvas id="ganttChart" height="320"></canvas>
-        </div>
-        <script id="ganttData" type="application/json">
-            @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GanttSchedule))
-        </script>
+        @Html.Partial("~/Views/PartialViews/Gantt/_GanttSchedule.cshtml", Model.GanttSchedule)
     }
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const optionsHtml = document.getElementById("cityOptions")?.innerHTML || "";
-        FlightLegManager.setCityOptions(optionsHtml.trim());
+        const rawJson = document.getElementById("cityOptionsJson")?.textContent || "[]";
+        const cityList = JSON.parse(rawJson);
+        const optionsHtml = cityList.map(c => `<option value="${c.Value}">${c.Text}</option>`).join("");
+
+        FlightLegManager.setCityOptions(optionsHtml);
         FlightLegManager.init(@Model.OutboundLegs.Count, @Model.ReturnLegs.Count);
 
         FlightLegValidator.bindFormValidation("form");
         FlightLegFieldValidator.bindFormValidation("form");
+
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".remove-leg-btn")) {
+                Swal.fire({
+                    title: '確定要移除這段航班嗎？',
+                    text: "此操作無法復原！",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: '是的，移除它',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        e.target.closest(".flight-leg-block").remove();
+                        Swal.fire('已移除', '該航段已被成功移除。', 'success');
+                    }
+                });
+            }
+        });
     });
 </script>

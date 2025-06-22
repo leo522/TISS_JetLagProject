@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using TISS_JetLag.ViewModels;
 
 namespace TISS_JetLag.ViewModels
 {
     #region 航班資訊建議
     public class FlightPlanInputViewModel
     {
-        // 分開管理去程與回程航段
-        public List<FlightLegViewModel> OutboundLegs { get; set; } = new List<FlightLegViewModel>();
-        public List<FlightLegViewModel> ReturnLegs { get; set; } = new List<FlightLegViewModel>();
+        [Required]
+        public List<FlightLegViewModel> OutboundLegs { get; set; } = new List<FlightLegViewModel>(); //去程
 
-        //舊欄位保留 (僅供預設單段用，不再直接運算)
+        [Required]
+        public List<FlightLegViewModel> ReturnLegs { get; set; } = new List<FlightLegViewModel>(); //回程
+
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime DepartureTimeLocal { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime ArrivalTimeLocal { get; set; }
 
-        // 以下保留原有欄位
         public int DepartureTimeZoneOffset { get; set; }
         public int ArrivalTimeZoneOffset { get; set; }
         public double DepartureLongitude { get; set; }
@@ -32,6 +38,7 @@ namespace TISS_JetLag.ViewModels
 
         public SunlightTimeViewModel DepartureSunlight { get; set; }
         public SunlightTimeViewModel ArrivalSunlight { get; set; }
+
         public List<DailyAdjustmentViewModel> SleepAdjustmentSchedule { get; set; } = new List<DailyAdjustmentViewModel>();
         public List<SleepMealSegmentViewModel> InFlightSchedule { get; set; } = new List<SleepMealSegmentViewModel>();
         public List<GanttSegmentViewModel> GanttSchedule { get; set; } = new List<GanttSegmentViewModel>();

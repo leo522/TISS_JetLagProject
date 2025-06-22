@@ -147,6 +147,7 @@
       <DependentUpon>JetLagSolutionsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utility\AdjustmentStrategyService.cs" />
+    <Compile Include="Utility\FlightValidator.cs" />
     <Compile Include="Utility\SleepMealPlannerService.cs" />
     <Compile Include="Utility\SunlightTimeService.cs" />
     <Compile Include="Utility\TimeZoneConverter.cs" />
@@ -2318,6 +2319,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="js\Chart-Adapter\chartjs-adapter-date-fns%403.js" />
     <Content Include="js\FlightJS\FlightLegValidator.js" />
+    <Content Include="js\GanttChart\GanttChartRenderer.js" />
     <Content Include="Models\JetLagSolutionsModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>JetLagSolutionsModel.Context.cs</LastGenOutput>
@@ -2425,6 +2427,7 @@
     <Content Include="Views\JetLagExplanation\Explanation.cshtml" />
     <Content Include="Views\FlightPlan\FlightAdjustmentPlanner.cshtml" />
     <Content Include="Views\Shared\_FlightPlannerLayout.cshtml" />
+    <Content Include="Views\PartialViews\Gantt\_GanttSchedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
