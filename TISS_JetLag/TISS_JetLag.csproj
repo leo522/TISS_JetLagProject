@@ -214,6 +214,7 @@
     <Content Include="css\bgStyle.css" />
     <Content Include="css\FlightPlanBgStyle.css" />
     <Content Include="css\FlightPlanStyle.css" />
+    <Content Include="css\GanttStyle\gantt-schedule.css" />
     <Content Include="css\jetlag-explanationStyle.css" />
     <Content Include="css\jetlag-solutionsStyle.css" />
     <Content Include="favicon.ico" />

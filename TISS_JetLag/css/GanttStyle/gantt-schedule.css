@@ -1,0 +1,79 @@
+﻿.gantt-container {
+    padding: 20px;
+    font-family: "黑體", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+.gantt-day-block {
+    margin-bottom: 48px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+
+.gantt-label {
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1f1f1f;
+}
+
+    .gantt-label::before {
+        content: "📅";
+    }
+
+.gantt-row {
+    display: flex;
+    position: relative;
+    height: auto;
+    min-height: 56px;
+    flex-wrap: nowrap;
+    overflow: visible;
+}
+
+.gantt-segment {
+    display: inline-block;
+/*    position: relative;
+    padding: 12px 14px;*/
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    background-color: #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+    min-width: 400px;
+    max-width: 420px;
+    word-break: break-word;
+    white-space: normal;
+    margin-top: 8px;
+}
+
+.gantt-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.gantt-tooltip {
+    font-size: 14px;
+    font-weight: 400;
+    color: #222;
+    opacity: 0.95;
+}
+
+@media (max-width: 768px) {
+    .gantt-label {
+        font-size: 16px;
+    }
+
+    .gantt-segment {
+        font-size: 14px;
+        padding: 10px 12px;
+        min-width: 140px;
+    }
+
+    .gantt-tooltip {
+        font-size: 12px;
+    }
+}
