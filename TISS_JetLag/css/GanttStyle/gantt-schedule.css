@@ -34,7 +34,8 @@
 
 .gantt-segment {
     display: inline-block;
-/*    position: relative;
+    margin-right: 16px;
+    /*    position: relative;
     padding: 12px 14px;*/
     border-radius: 6px;
     font-size: 18px;
