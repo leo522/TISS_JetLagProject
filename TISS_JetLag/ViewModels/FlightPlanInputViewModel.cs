@@ -16,6 +16,14 @@ namespace TISS_JetLag.ViewModels
         [Required]
         public List<FlightLegViewModel> ReturnLegs { get; set; } = new List<FlightLegViewModel>(); //回程
 
+        [Display(Name = "平常睡覺時間")]
+        [DataType(DataType.Time)]
+        public TimeSpan? UserSleepTime { get; set; }
+
+        [Display(Name = "平常起床時間")]
+        [DataType(DataType.Time)]
+        public TimeSpan? UserWakeTime { get; set; }
+
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }
 

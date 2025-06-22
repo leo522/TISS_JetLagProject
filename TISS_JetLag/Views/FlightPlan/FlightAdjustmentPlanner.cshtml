@@ -18,6 +18,20 @@
     {
         @Html.AntiForgeryToken()
 
+        <!-- 使用者平常作息設定 -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">您平常的睡覺時間</label>
+                <input type="time" name="UserSleepTime" class="form-control"
+                       value="@(Model.UserSleepTime.HasValue ? Model.UserSleepTime.Value.ToString(@"hh\:mm") : "")" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">您平常的起床時間</label>
+                <input type="time" name="UserWakeTime" class="form-control"
+                       value="@(Model.UserWakeTime.HasValue ? Model.UserWakeTime.Value.ToString(@"hh\:mm") : "")" required />
+            </div>
+        </div>
+
         <!-- 去程航段 -->
         <h4 class="text-success mb-4 mt-4"><i class="fas fa-plane-departure me-2"></i>去程航段</h4>
         <div id="outboundLegsContainer">
@@ -87,6 +101,7 @@
             <i class="fas fa-undo"></i> 清除重填
         </a>
     }
+
 
     @if (!string.IsNullOrWhiteSpace(Model.ResultMessage))
     {

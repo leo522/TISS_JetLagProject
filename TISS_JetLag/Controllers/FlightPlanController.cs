@@ -83,8 +83,11 @@ namespace TISS_JetLag.Controllers
                     ? (int)Math.Ceiling(Math.Abs(model.TimeDifference) / 1.0)
                     : (int)Math.Ceiling(Math.Abs(model.TimeDifference) / 0.75);
 
-                model.ResultMessage = $"您從 {model.DepartureCity} 飛往 {model.ArrivalCity}，屬於【{model.FlightDirection}】，" +
-                                      $"時差為 {model.TimeDifference} 小時，建議提前調整 {model.SuggestedAdjustmentDays} 天作息。";
+                // 使用者輸入作息時間（有值則用，否則預設）
+                var baseSleepTime = model.UserSleepTime ?? new TimeSpan(23, 0, 0);
+                var baseWakeTime = model.UserWakeTime ?? new TimeSpan(7, 0, 0);
+
+                model.ResultMessage = $"您從 {model.DepartureCity} 飛往 {model.ArrivalCity}，屬於【{model.FlightDirection}】，" + $"時差為 {model.TimeDifference} 小時，建議提前調整 {model.SuggestedAdjustmentDays} 天作息。" +$"（依您平常作息：{baseSleepTime:hh\\:mm} - {baseWakeTime:hh\\:mm}）";
 
                 var today = DateTime.Today;
 
@@ -94,8 +97,7 @@ namespace TISS_JetLag.Controllers
                 model.ArrivalSunlight = await SunlightTimeService.GetSunlightTimeAsync(
                     model.ArrivalCity, arr.Latitude, arr.Longitude, arr.TimeZoneOffset, today.AddDays(1));
 
-                var baseSleepTime = new TimeSpan(23, 0, 0);
-                var baseWakeTime = new TimeSpan(7, 0, 0);
+                // 若查詢日出日落失敗，則以 6:00 / 18:00 為預設時間
                 var sunriseTime = model.ArrivalSunlight?.SunriseLocal.TimeOfDay ?? new TimeSpan(6, 0, 0);
                 var sunsetTime = model.ArrivalSunlight?.SunsetLocal.TimeOfDay ?? new TimeSpan(18, 0, 0);
 
@@ -152,10 +154,7 @@ namespace TISS_JetLag.Controllers
                             Start = depUtc,
                             End = arrUtc,
                             Color = color,
-                            TooltipText = $"{labelPrefix} {leg.DepartureCity} → {leg.ArrivalCity}\n" +
-                                          $"起飛（當地）：{leg.DepartureTimeLocal:MM/dd HH:mm} (UTC{depInfo.TimeZoneOffset:+0;-#})\n" +
-                                          $"抵達（當地）：{leg.ArrivalTimeLocal:MM/dd HH:mm} (UTC{arrInfo.TimeZoneOffset:+0;-#})\n" +
-                                          $"顯示時間軸（UTC）：{depUtc:MM/dd HH:mm} → {arrUtc:MM/dd HH:mm}",
+                            TooltipText = $"{labelPrefix} {leg.DepartureCity} → {leg.ArrivalCity}\n" + $"起飛（當地）：{leg.DepartureTimeLocal:MM/dd HH:mm} (UTC{depInfo.TimeZoneOffset:+0;-#})\n" + $"抵達（當地）：{leg.ArrivalTimeLocal:MM/dd HH:mm} (UTC{arrInfo.TimeZoneOffset:+0;-#})\n" + $"顯示時間軸（UTC）：{depUtc:MM/dd HH:mm} → {arrUtc:MM/dd HH:mm}",
                             Category = "航班"
                         });
                     }
