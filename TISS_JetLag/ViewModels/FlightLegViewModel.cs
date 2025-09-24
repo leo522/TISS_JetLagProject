@@ -20,11 +20,11 @@ namespace TISS_JetLag.ViewModels
 
         [Required(ErrorMessage = "請輸入出發時間")]
         [DataType(DataType.DateTime)]
-        public DateTime DepartureTimeLocal { get; set; }
+        public DateTime? DepartureTimeLocal { get; set; }
 
         [Required(ErrorMessage = "請輸入抵達時間")]
         [DataType(DataType.DateTime)]
-        public DateTime ArrivalTimeLocal { get; set; }
+        public DateTime? ArrivalTimeLocal { get; set; }
 
         public int DepartureTimeZoneOffset { get; set; }
         public int ArrivalTimeZoneOffset { get; set; }

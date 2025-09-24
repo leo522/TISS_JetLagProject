@@ -28,10 +28,10 @@ namespace TISS_JetLag.ViewModels
         public string ArrivalCity { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime DepartureTimeLocal { get; set; }
+        public DateTime? DepartureTimeLocal { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime ArrivalTimeLocal { get; set; }
+        public DateTime? ArrivalTimeLocal { get; set; }
 
         public int DepartureTimeZoneOffset { get; set; }
         public int ArrivalTimeZoneOffset { get; set; }
@@ -41,6 +41,9 @@ namespace TISS_JetLag.ViewModels
         public string FlightDirection { get; set; }
         public int TimeDifference { get; set; }
         public int SuggestedAdjustmentDays { get; set; }
+
+        public string DepartureTimeZoneId { get; set; }
+        public string ArrivalTimeZoneId { get; set; }
 
         public string ResultMessage { get; set; }
 

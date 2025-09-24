@@ -9,7 +9,7 @@
 <script src="~/js/FlightJS/FlightLegFieldValidator.js"></script>
 <script src="~/js/GanttChart/GanttChartRenderer.js"></script>
 <script id="cityOptionsJson" type="application/json">
-    @Html.Raw(Json.Encode(ViewBag.CityList))
+    @Html.Raw(ViewBag.CityListJson)
 </script>
 
 <div class="container py-4">
@@ -40,19 +40,23 @@
                 <div class="row g-3 mb-3 flight-leg-block border rounded p-3 bg-light">
                     <div class="col-md-5">
                         <label class="form-label">出發機場</label>
-                        @Html.DropDownList($"OutboundLegs[{i}].DepartureCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
+                        @Html.DropDownList($"OutboundLegs[{i}].DepartureCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select city-select", required = "required" })
+                        <div class="text-muted small mt-1 timezone-info"></div> @*顯示當地時間與 DST *@
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">抵達機場</label>
-                        @Html.DropDownList($"OutboundLegs[{i}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
+                        @Html.DropDownList($"OutboundLegs[{i}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select city-select", required = "required" })
+                        <div class="text-muted small mt-1 timezone-info"></div> @*顯示當地時間與 DST *@
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">出發時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="OutboundLegs[i].DepartureTimeLocal" value="@Model.OutboundLegs[i].DepartureTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
+                        <label class="form-label">出發時間(當地)</label>
+                        <input type="datetime-local" class="form-control" name="OutboundLegs[@i].DepartureTimeLocal"
+                               value="@(Model.OutboundLegs[i].DepartureTimeLocal.HasValue ? Model.OutboundLegs[i].DepartureTimeLocal.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">抵達時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="OutboundLegs[i].ArrivalTimeLocal" value="@Model.OutboundLegs[i].ArrivalTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
+                        <input type="datetime-local" class="form-control" name="OutboundLegs[@i].ArrivalTimeLocal"
+                               value="@(Model.OutboundLegs[i].ArrivalTimeLocal.HasValue ? Model.OutboundLegs[i].ArrivalTimeLocal.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
                     </div>
                     <div class="col-12 text-end">
                         <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
@@ -79,12 +83,14 @@
                         @Html.DropDownList($"ReturnLegs[{j}].ArrivalCity", ViewBag.CityList as List<SelectListItem>, "請選擇", new { @class = "form-select", required = "required" })
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">出發時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="ReturnLegs[j].DepartureTimeLocal" value="@Model.ReturnLegs[j].DepartureTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
+                        <label class="form-label">出發時間(當地)</label>
+                        <input type="datetime-local" class="form-control" name="ReturnLegs[@j].DepartureTimeLocal"
+                               value="@(Model.ReturnLegs[j].DepartureTimeLocal.HasValue ? Model.ReturnLegs[j].DepartureTimeLocal.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">抵達時間（當地）</label>
-                        <input type="datetime-local" class="form-control" name="ReturnLegs[j].ArrivalTimeLocal" value="@Model.ReturnLegs[j].ArrivalTimeLocal.ToString("yyyy-MM-ddTHH:mm")" required />
+                        <label class="form-label">抵達時間(當地)</label>
+                        <input type="datetime-local" class="form-control" name="ReturnLegs[@j].ArrivalTimeLocal"
+                               value="@(Model.ReturnLegs[j].ArrivalTimeLocal.HasValue ? Model.ReturnLegs[j].ArrivalTimeLocal.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
                     </div>
                     <div class="col-12 text-end">
                         <button type="button" class="btn btn-danger btn-sm mt-2 remove-leg-btn"><i class="fas fa-minus-circle"></i> 移除航段</button>
@@ -101,7 +107,6 @@
             <i class="fas fa-undo"></i> 清除重填
         </a>
     }
-
 
     @if (!string.IsNullOrWhiteSpace(Model.ResultMessage))
     {
@@ -146,5 +151,32 @@
                 });
             }
         });
+
+        // 顯示機場當地時間與時區資訊
+        function updateTimeZoneInfo(container, selectedCode) {
+            const cityData = cityList.find(c => c.Value === selectedCode);
+            const tzDiv = container.querySelectorAll(".timezone-info");
+
+            if (!cityData) {
+                tzDiv.forEach(div => div.innerHTML = "");
+                return;
+            }
+
+            const html = `🕓 <strong>${cityData.Text}</strong><br>
+        當地時間：${cityData.CurrentLocalTime}<br>
+        時區：${cityData.TimeZoneId}（${cityData.IsInDst ? "夏令時間中" : "無 DST"}）`;
+
+            tzDiv.forEach(div => div.innerHTML = html);
+        }
+
+        // 初始與變更都綁定
+        document.querySelectorAll(".city-select").forEach(select => {
+            const container = select.closest(".flight-leg-block");
+            updateTimeZoneInfo(container, select.value);
+            select.addEventListener("change", () => {
+                updateTimeZoneInfo(container, select.value);
+            });
+        });
+
     });
 </script>
